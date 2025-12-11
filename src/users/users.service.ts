@@ -22,7 +22,10 @@ export class UsersService {
   }
 
   findAll() {
-    return this.userModel.find();
+    // return this.userModel.find({age:{$eq:22}}).populate({path:"posts",select:"-user"})
+    // return this.userModel.find({name:{$regex:/^g/}}).populate({path:"posts",select:"-user"})
+    // return this.userModel.find({name:{$regex:/giorgi/i}}).populate({path:"posts",select:"-user"})
+    return this.userModel.find().populate({path:"posts",select:"-user"})
   }
 
   async findOne(id: string) {
@@ -45,4 +48,10 @@ export class UsersService {
     if(!deletedUser) throw new NotFoundException("user not found")
     return deletedUser
   }
+
+  async addPost(userId,postId){
+    const updateUser = await this.userModel.findByIdAndUpdate(userId,{$push:{posts:postId}})
+    return updateUser
+  }
+  
 }
